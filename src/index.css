@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --color-pure-white: #FFFFFF;
+  --color-chalk-white: #F5F5F7;
+  --color-jet-black: #000000;
+  --color-ocean-blue: #0071E3;
+  --color-ocean-blue-dark: #005BB5;
+  --color-cocoa-brown: #5A122C;
+}
+
+@layer base {
+  html,
+  body {
+    font-family: var(--font-sans);
+    background-color: #F5F5F7;
+    color: #000000;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 3px solid #0071E3;
+    outline-offset: 2px;
+  }
+}
+
+/* Simple mode typography scale tokens */
+.simple-text-normal {
+  --simple-body: 1.25rem;      /* 20px */
+  --simple-caption: 1.375rem;  /* 22px */
+  --simple-heading: 1.75rem;   /* 28px */
+}
+
+.simple-text-bigger {
+  --simple-body: 1.5rem;       /* 24px */
+  --simple-caption: 1.625rem;  /* 26px */
+  --simple-heading: 2.125rem;  /* 34px */
+}
+
+.simple-body {
+  font-size: var(--simple-body, 1.25rem);
+  line-height: 1.45;
+}
+
+.simple-caption {
+  font-size: var(--simple-caption, 1.375rem);
+  line-height: 1.4;
+}
+
+.simple-heading {
+  font-size: var(--simple-heading, 1.75rem);
+  line-height: 1.2;
+}
+
+/* Hide scrollbars in vertical snap feed while preserving native momentum scrolling */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
