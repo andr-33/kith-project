@@ -7,7 +7,7 @@ function VideoPlayer({ item, simple }) {
 
   const [playing, setPlaying] = useState(false);
   const [elapsed, setElapsed] = useState(0);
-  const total = item.durationSeconds || 12;
+  const total = item.durationSeconds || 11;
 
   useEffect(() => {
     if (!playing || isRealVideoFile) return undefined;
@@ -25,13 +25,15 @@ function VideoPlayer({ item, simple }) {
 
   if (isRealVideoFile) {
     return (
-      <div className="bg-[#000000] rounded-2xl overflow-hidden">
+      <div className="bg-[#000000] overflow-hidden w-full h-full flex items-center justify-center">
         <video
           src={item.url}
           poster={item.posterUrl}
           controls
           playsInline
-          className="w-full max-h-[58vh] object-contain mx-auto"
+          className={`w-full object-cover ${
+            simple ? 'h-[36vh] min-h-[220px] max-h-[380px]' : 'aspect-[4/3] max-h-[500px]'
+          }`}
         />
       </div>
     );
@@ -40,44 +42,61 @@ function VideoPlayer({ item, simple }) {
   const formatSec = (sec) => `0:${String(sec).padStart(2, '0')}`;
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="relative overflow-hidden rounded-2xl bg-[#000000] aspect-[4/3] border border-[#D2D2D7]">
-        <img
-          src={item.posterUrl || item.url}
-          alt={item.alt || 'Video preview'}
-          className={`w-full h-full object-cover transition-transform duration-1000 ease-out ${
-            playing ? 'scale-105' : 'scale-100'
-          }`}
-        />
+    <div
+      role="button"
+      tabIndex={0}
+      aria-label={playing ? 'Pause video' : 'Play video'}
+      onClick={() => setPlaying((p) => !p)}
+      onKeyDown={(e) => {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          setPlaying((p) => !p);
+        }
+      }}
+      className={`relative w-full overflow-hidden bg-[#000000] cursor-pointer select-none group flex items-center justify-center ${
+        simple ? 'h-[36vh] min-h-[220px] max-h-[380px]' : 'aspect-[4/3] max-h-[500px]'
+      }`}
+    >
+      <img
+        src={item.posterUrl || item.url}
+        alt={item.alt || 'Video preview'}
+        className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
+          playing ? 'scale-105' : 'scale-100 group-hover:scale-102'
+        }`}
+      />
+
+      {/* Floating center play/pause button (zero vertical space used) */}
+      <div
+        className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-200 ${
+          playing ? 'opacity-0 hover:opacity-100' : 'opacity-100'
+        }`}
+      >
+        <div className="w-16 h-16 rounded-full bg-[#000000]/65 backdrop-blur-md text-white flex items-center justify-center shadow-xl border border-white/20 transition-transform active:scale-90">
+          {playing ? (
+            <Pause className="w-7 h-7 fill-white" />
+          ) : (
+            <Play className="w-7 h-7 fill-white translate-x-0.5" />
+          )}
+        </div>
       </div>
 
-      {/* Controls sit cleanly below the visual — never placed over photos */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#F5F5F7] rounded-xl px-4 py-2 border border-[#D2D2D7]">
-        <button
-          type="button"
-          onClick={() => setPlaying((p) => !p)}
-          className={`inline-flex items-center gap-2 rounded-xl bg-[#0071E3] hover:bg-[#005BB5] active:scale-[0.98] text-white font-semibold px-4 transition ${
-            simple ? 'min-h-[48px] text-[19px]' : 'min-h-[40px] text-sm'
-          }`}
-        >
-          {playing ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-          <span>{playing ? 'Pause' : 'Play video'}</span>
-        </button>
+      {/* Discrete bottom corner duration badge */}
+      <div className="absolute bottom-2.5 right-2.5 z-10 pointer-events-none">
+        <span className="rounded-full bg-[#000000]/70 backdrop-blur-md text-white text-xs font-semibold px-2.5 py-1 inline-flex items-center gap-1.5 shadow-sm border border-white/10">
+          <Video className="w-3.5 h-3.5 text-white" />
+          <span>{playing ? `${formatSec(elapsed)} / ${formatSec(total)}` : formatSec(total)}</span>
+        </span>
+      </div>
 
-        <div className="flex items-center gap-2 text-[#000000] font-medium">
-          <Video className="w-5 h-5 text-[#5A122C]" aria-hidden="true" />
-          <span className={simple ? 'text-[18px]' : 'text-sm'}>
-            {formatSec(elapsed)} / {formatSec(total)}
-          </span>
-        </div>
-
-        <div className="w-full h-1.5 bg-[#D2D2D7] rounded-full overflow-hidden">
+      {/* Subtle bottom progress bar */}
+      {playing && (
+        <div className="absolute bottom-0 inset-x-0 h-1 bg-white/30 overflow-hidden">
           <div
             className="h-full bg-[#0071E3] transition-all duration-300"
             style={{ width: `${Math.round((elapsed / total) * 100)}%` }}
           />
         </div>
-      </div>
+      )}
     </div>
   );
 }
