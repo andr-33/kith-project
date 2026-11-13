@@ -105,23 +105,23 @@ export default function AdminView() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-6 pb-28 space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
+    <div className="max-w-md mx-auto px-4 py-5 pb-28 space-y-5">
+      <div className="flex flex-col gap-3">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#000000]">
+          <h1 className="text-2xl font-bold tracking-tight text-[#000000]">
             Family Admin
           </h1>
-          <p className="text-sm text-[#1D1D1F]">
-            Invitations, screen modes, PIN resets, moderation, and full export.
+          <p className="text-xs text-[#1D1D1F]">
+            Invitations, member accounts, PIN resets, moderation, and archive export.
           </p>
         </div>
 
         <button
           type="button"
           onClick={handleExportAll}
-          className="min-h-[48px] rounded-2xl bg-[#0071E3] hover:bg-[#005BB5] text-white font-semibold px-5 inline-flex items-center gap-2 transition"
+          className="w-full min-h-[46px] rounded-xl bg-[#0071E3] hover:bg-[#005BB5] text-white font-semibold px-4 inline-flex items-center justify-center gap-2 text-sm transition shadow-xs"
         >
-          <Download className="w-5 h-5" />
+          <Download className="w-4 h-4" />
           <span>Export All Photos &amp; Captions</span>
         </button>
       </div>

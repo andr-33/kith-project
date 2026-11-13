@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Camera, Check, LogOut, Type } from 'lucide-react';
 import { useApp } from '../state/AppContext';
 import Avatar from '../components/Avatar';
+import InstallPrompt from '../components/InstallPrompt';
 
 export default function ProfileView() {
   const { users, currentUser, updateOwnProfile, logout } = useApp();
-  const simple = currentUser?.screen_mode === 'simple';
 
   const [nickname, setNickname] = useState(currentUser?.nickname || '');
   const [savedNotice, setSavedNotice] = useState(false);
@@ -30,28 +30,27 @@ export default function ProfileView() {
 
   return (
     <div
-      className={`${simple ? textScaleClass : ''} max-w-2xl mx-auto px-4 py-6 pb-28 space-y-6`}
+      className={`${textScaleClass} max-w-md mx-auto px-4 py-5 pb-28 space-y-5`}
     >
-      <h1 className={simple ? 'simple-heading font-bold text-[#000000]' : 'text-3xl font-bold text-[#000000]'}>
+      <h1 className="simple-heading font-bold text-[#000000]">
         My Profile
       </h1>
 
+      {/* Install to Home Screen prompt */}
+      <InstallPrompt simple />
+
       {/* Own Profile Card */}
-      <section className="bg-[#FFFFFF] rounded-3xl border border-[#D2D2D7] p-5 sm:p-6 space-y-5">
-        <div className="flex flex-wrap items-center gap-4">
+      <section className="bg-[#FFFFFF] rounded-3xl border border-[#D2D2D7] p-5 space-y-4 shadow-xs">
+        <div className="flex items-center gap-4">
           <Avatar user={currentUser} size="xl" />
-          <div className="space-y-2">
-            <h2 className={simple ? 'simple-heading font-bold text-[#000000]' : 'text-xl font-bold text-[#000000]'}>
+          <div className="space-y-1">
+            <h2 className="simple-heading font-bold text-[#000000]">
               {currentUser?.nickname}
             </h2>
-            <p className={simple ? 'simple-body text-[#1D1D1F]' : 'text-sm text-[#1D1D1F]'}>
+            <p className="simple-body text-[#1D1D1F]">
               {currentUser?.email}
             </p>
-            <label
-              className={`inline-flex items-center gap-2 rounded-2xl border border-[#D2D2D7] bg-[#F5F5F7] hover:bg-[#E8E8ED] cursor-pointer font-semibold text-[#000000] px-4 transition ${
-                simple ? 'min-h-[56px] text-[19px]' : 'min-h-[44px] text-sm'
-              }`}
-            >
+            <label className="inline-flex items-center gap-2 rounded-2xl border border-[#D2D2D7] bg-[#F5F5F7] hover:bg-[#E8E8ED] cursor-pointer font-semibold text-[#000000] px-4 py-2 text-base transition">
               <Camera className="w-5 h-5 text-[#0071E3]" />
               <span>Change photo</span>
               <input
@@ -65,41 +64,37 @@ export default function ProfileView() {
         </div>
 
         {/* Edit Nickname */}
-        <form onSubmit={handleSaveNickname} className="space-y-3 pt-2 border-t border-[#F5F5F7]">
-          <label className="block space-y-1.5">
-            <span className={`block font-semibold text-[#000000] ${simple ? 'text-[20px]' : 'text-sm'}`}>
-              My display name
+        <form onSubmit={handleSaveNickname} className="space-y-2.5 pt-3 border-t border-[#F5F5F7]">
+          <label className="block space-y-1">
+            <span className="block font-semibold text-[18px] text-[#000000]">
+              Display name
             </span>
             <input
               type="text"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
-              className={`w-full rounded-2xl border border-[#D2D2D7] bg-[#F5F5F7] px-4 text-[#000000] ${
-                simple ? 'min-h-[56px] text-[20px]' : 'min-h-[46px] text-base'
-              }`}
+              className="w-full min-h-[52px] rounded-2xl border border-[#D2D2D7] bg-[#F5F5F7] px-4 text-[19px] text-[#000000]"
             />
           </label>
 
           <button
             type="submit"
-            className={`rounded-2xl bg-[#0071E3] hover:bg-[#005BB5] text-white font-semibold px-6 inline-flex items-center gap-2 transition ${
-              simple ? 'min-h-[56px] text-[20px]' : 'min-h-[44px] text-sm'
-            }`}
+            className="min-h-[48px] rounded-2xl bg-[#0071E3] hover:bg-[#005BB5] text-white font-semibold px-5 text-base inline-flex items-center gap-2 transition"
           >
             {savedNotice ? <Check className="w-5 h-5" /> : null}
             <span>{savedNotice ? 'Saved!' : 'Save name'}</span>
           </button>
         </form>
 
-        {/* Bigger text toggle (essential for Simple mode grandparents) */}
-        <div className="pt-3 border-t border-[#F5F5F7] flex flex-wrap items-center justify-between gap-3">
+        {/* Bigger text toggle */}
+        <div className="pt-3 border-t border-[#F5F5F7] flex items-center justify-between gap-3">
           <div className="space-y-0.5">
-            <div className={`font-bold text-[#000000] flex items-center gap-2 ${simple ? 'text-[22px]' : 'text-base'}`}>
+            <div className="font-bold text-[20px] text-[#000000] flex items-center gap-2">
               <Type className="w-5 h-5 text-[#0071E3]" />
               <span>Bigger text</span>
             </div>
-            <p className={simple ? 'simple-body text-[#1D1D1F]' : 'text-sm text-[#1D1D1F]'}>
-              Makes captions and buttons larger on Simple screen.
+            <p className="simple-body text-[#1D1D1F]">
+              Enlarges captions and text across the app.
             </p>
           </div>
 
@@ -108,15 +103,13 @@ export default function ProfileView() {
             role="switch"
             aria-checked={Boolean(currentUser?.bigger_text)}
             onClick={() => updateOwnProfile({ bigger_text: !currentUser?.bigger_text })}
-            className={`min-h-[56px] rounded-2xl px-5 font-bold transition ${
-              simple ? 'text-[20px]' : 'text-sm'
-            } ${
+            className={`min-h-[48px] rounded-2xl px-5 font-bold text-base transition ${
               currentUser?.bigger_text
                 ? 'bg-[#0071E3] text-white'
                 : 'bg-[#F5F5F7] border border-[#D2D2D7] text-[#000000]'
             }`}
           >
-            {currentUser?.bigger_text ? 'Bigger text: ON' : 'Bigger text: OFF'}
+            {currentUser?.bigger_text ? 'ON' : 'OFF'}
           </button>
         </div>
 
@@ -125,9 +118,7 @@ export default function ProfileView() {
           <button
             type="button"
             onClick={logout}
-            className={`w-full sm:w-auto rounded-2xl border-2 border-[#5A122C] bg-[#FFFFFF] hover:bg-[#FDF2F4] text-[#5A122C] font-bold px-6 inline-flex items-center justify-center gap-2 transition ${
-              simple ? 'min-h-[56px] text-[20px]' : 'min-h-[48px] text-sm'
-            }`}
+            className="w-full min-h-[52px] rounded-2xl border border-[#5A122C] bg-[#FFFFFF] hover:bg-[#FDF2F4] text-[#5A122C] font-bold text-[18px] inline-flex items-center justify-center gap-2 transition"
           >
             <LogOut className="w-5 h-5" />
             <span>Sign out</span>
@@ -136,22 +127,22 @@ export default function ProfileView() {
       </section>
 
       {/* Family Circle Directory */}
-      <section className="bg-[#FFFFFF] rounded-3xl border border-[#D2D2D7] p-5 sm:p-6 space-y-4">
-        <h2 className={simple ? 'simple-heading font-bold text-[#000000]' : 'text-xl font-bold text-[#000000]'}>
+      <section className="bg-[#FFFFFF] rounded-3xl border border-[#D2D2D7] p-5 space-y-3 shadow-xs">
+        <h2 className="simple-heading font-bold text-[#000000]">
           Family Circle ({users.length})
         </h2>
 
         <div className="divide-y divide-[#F5F5F7]">
           {users.map((member) => (
-            <div key={member.id} className="py-3.5 flex items-center justify-between gap-3">
+            <div key={member.id} className="py-3 flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                <Avatar user={member} size={simple ? 'lg' : 'md'} />
+                <Avatar user={member} size="lg" />
                 <div>
-                  <div className={`font-bold text-[#000000] ${simple ? 'text-[22px]' : 'text-base'}`}>
+                  <div className="font-bold text-[20px] text-[#000000]">
                     {member.nickname}
                     {member.id === currentUser?.id ? ' (You)' : ''}
                   </div>
-                  <div className={`text-[#1D1D1F] ${simple ? 'text-[18px]' : 'text-xs'}`}>
+                  <div className="text-[17px] text-[#1D1D1F]">
                     {member.role === 'admin' ? 'Family Admin' : 'Family Member'}
                   </div>
                 </div>
