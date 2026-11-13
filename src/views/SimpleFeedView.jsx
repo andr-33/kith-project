@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowUp, MessageCircle, Sparkles } from 'lucide-react';
+import { MessageCircle, Sparkles } from 'lucide-react';
 import { useApp } from '../state/AppContext';
 import { formatPostTime, isPostNew } from '../utils/validators';
 import Avatar from '../components/Avatar';
@@ -58,15 +58,6 @@ export default function SimpleFeedView() {
 
     return () => observer.disconnect();
   }, [displayedPosts.length]);
-
-  function jumpToPost(idx) {
-    const clamped = Math.max(0, Math.min(displayedPosts.length - 1, idx));
-    const el = slideRefs.current[clamped];
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setActiveIndex(clamped);
-    }
-  }
 
   const activeCommentsPost = commentsPostId
     ? posts.find((p) => p.id === commentsPostId)
@@ -181,8 +172,8 @@ export default function SimpleFeedView() {
                   {/* 6 large reaction buttons (emoji + word) */}
                   <ReactionBar post={post} simple />
 
-                  {/* Single clear Comments button + Explicit Up/Down tap controls */}
-                  <div className="pt-1 flex flex-col gap-3">
+                  {/* Single clear Comments button */}
+                  <div className="pt-1">
                     <button
                       type="button"
                       onClick={() => setCommentsPostId(post.id)}
@@ -195,28 +186,6 @@ export default function SimpleFeedView() {
                           : `Comments (${commentCount})`}
                       </span>
                     </button>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        type="button"
-                        onClick={() => jumpToPost(idx - 1)}
-                        disabled={idx === 0}
-                        className="min-h-[56px] rounded-2xl border border-[#D2D2D7] bg-[#F5F5F7] hover:bg-[#E8E8ED] disabled:opacity-40 text-[#000000] font-bold text-[19px] inline-flex items-center justify-center gap-2 transition"
-                      >
-                        <ArrowUp className="w-5 h-5" />
-                        <span>Previous</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => jumpToPost(idx + 1)}
-                        disabled={idx === displayedPosts.length - 1}
-                        className="min-h-[56px] rounded-2xl border border-[#D2D2D7] bg-[#F5F5F7] hover:bg-[#E8E8ED] disabled:opacity-40 text-[#000000] font-bold text-[19px] inline-flex items-center justify-center gap-2 transition"
-                      >
-                        <ArrowDown className="w-5 h-5" />
-                        <span>Next post</span>
-                      </button>
-                    </div>
                   </div>
                 </article>
               </section>
