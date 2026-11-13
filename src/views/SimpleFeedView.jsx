@@ -83,11 +83,6 @@ export default function SimpleFeedView() {
         <div className="max-w-2xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="simple-heading font-bold text-[#000000]">Family</span>
-            {displayedPosts.length > 0 && (
-              <span className="rounded-full bg-[#F5F5F7] border border-[#D2D2D7] px-3 py-1 text-[18px] font-semibold text-[#000000]">
-                {activeIndex + 1} of {displayedPosts.length}
-              </span>
-            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -95,13 +90,11 @@ export default function SimpleFeedView() {
               <button
                 type="button"
                 onClick={() => setOnlyNew((v) => !v)}
-                className={`min-h-[56px] px-4 rounded-2xl font-bold text-[19px] inline-flex items-center gap-2 border transition ${
-                  onlyNew
-                    ? 'bg-[#5A122C] text-white border-[#5A122C]'
-                    : 'bg-[#FFFFFF] text-[#5A122C] border-[#5A122C] hover:bg-[#FDF2F4]'
-                }`}
+                className={`min-h-[44px] px-4 rounded-2xl font-bold text-[19px] inline-flex items-center gap-2 border transition ${onlyNew
+                  ? 'bg-[#5A122C] text-white border-[#5A122C]'
+                  : 'bg-[#FFFFFF] text-[#5A122C] border-[#5A122C] hover:bg-[#FDF2F4]'
+                  }`}
               >
-                <Sparkles className="w-5 h-5" />
                 <span>{onlyNew ? 'Show all posts' : `${newPostsCount} New`}</span>
               </button>
             )}

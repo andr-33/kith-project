@@ -53,7 +53,7 @@ function MainShell() {
                   activeTab === 'feed'
                     ? 'bg-[#EAF3FE] text-[#005BB5]'
                     : 'text-[#000000] hover:bg-[#F5F5F7]'
-                }`}
+                  }`}
               >
                 <Home className="w-4 h-4" />
                 <span>Feed</span>
@@ -66,7 +66,7 @@ function MainShell() {
                   activeTab === 'profile'
                     ? 'bg-[#EAF3FE] text-[#005BB5]'
                     : 'text-[#000000] hover:bg-[#F5F5F7]'
-                }`}
+                  }`}
               >
                 <User className="w-4 h-4" />
                 <span>Profile</span>
@@ -80,7 +80,7 @@ function MainShell() {
                     activeTab === 'admin'
                       ? 'bg-[#EAF3FE] text-[#005BB5]'
                       : 'text-[#000000] hover:bg-[#F5F5F7]'
-                  }`}
+                    }`}
                 >
                   <Shield className="w-4 h-4" />
                   <span>Admin</span>
@@ -112,7 +112,7 @@ function MainShell() {
                 activeTab === 'feed'
                   ? 'bg-[#0071E3] text-white'
                   : 'bg-[#F5F5F7] text-[#000000] border border-[#D2D2D7]'
-              }`}
+                }`}
             >
               <Home className="w-6 h-6" />
               <span>Feed</span>
@@ -130,10 +130,10 @@ function MainShell() {
                 activeTab === 'profile'
                   ? 'bg-[#0071E3] text-white'
                   : 'bg-[#F5F5F7] text-[#000000] border border-[#D2D2D7]'
-              }`}
+                }`}
             >
               <User className="w-6 h-6" />
-              <span>My Profile</span>
+              <span>Profile</span>
             </button>
           </div>
         </nav>

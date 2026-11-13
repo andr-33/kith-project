@@ -38,12 +38,11 @@ export default function CommentsPanel({ post, simple = false, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className={`inline-flex items-center gap-2 rounded-xl border border-[#D2D2D7] bg-[#F5F5F7] text-[#000000] font-semibold px-4 hover:bg-[#E8E8ED] ${
-              simple ? 'min-h-[56px] text-[20px]' : 'min-h-[44px] text-sm'
+            className={`inline-flex items-center h-[44px] rounded-xl border border-[#D2D2D7] bg-[#F5F5F7] text-[#000000] font-semibold px-4 hover:bg-[#E8E8ED] ${
+              simple ? 'text-[20px]' : 'text-sm'
             }`}
           >
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to post</span>
           </button>
 
           <h2 className={`font-bold text-[#000000] ${simple ? 'text-[24px]' : 'text-lg'}`}>
@@ -70,7 +69,7 @@ export default function CommentsPanel({ post, simple = false, onClose }) {
                   key={comment.id}
                   className="bg-[#FFFFFF] rounded-2xl border border-[#D2D2D7] p-4 flex flex-col gap-2"
                 >
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-3">
                       <Avatar user={author} size={simple ? 'md' : 'sm'} />
                       <div>
@@ -87,12 +86,11 @@ export default function CommentsPanel({ post, simple = false, onClose }) {
                       <button
                         type="button"
                         onClick={() => deleteComment(comment.id)}
-                        className={`inline-flex items-center gap-1.5 rounded-xl border border-[#D2D2D7] px-3 text-[#5A122C] font-semibold hover:bg-[#FDF2F4] ${
-                          simple ? 'min-h-[56px] text-[18px]' : 'min-h-[38px] text-xs'
+                        className={`inline-flex items-center rounded-xl border border-[#D2D2D7] h-[38px] px-3 text-[#5A122C] font-semibold hover:bg-[#FDF2F4] ${
+                          simple ? 'text-[18px]' : 'text-xs'
                         }`}
                       >
                         <Trash2 className="w-4 h-4" />
-                        <span>Delete</span>
                       </button>
                     )}
                   </div>
