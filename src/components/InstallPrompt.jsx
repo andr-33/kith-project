@@ -28,12 +28,9 @@ export default function InstallPrompt({ simple = false }) {
           type="button"
           onClick={() => setDismissed(true)}
           aria-label="Dismiss home screen prompt"
-          className={`inline-flex items-center gap-1 rounded-xl border border-[#D2D2D7] px-3 text-[#000000] font-semibold hover:bg-[#F5F5F7] shrink-0 ${
-            simple ? 'min-h-[56px] text-[18px]' : 'min-h-[40px] text-xs'
-          }`}
+          className={`inline-flex items-center gap-1 rounded-xl border border-[#D2D2D7] px-3 text-[#000000] font-semibold hover:bg-[#F5F5F7] shrink-0 min-h-[40px] text-xs`}
         >
           <X className="w-4 h-4" />
-          <span>Close</span>
         </button>
       </div>
 

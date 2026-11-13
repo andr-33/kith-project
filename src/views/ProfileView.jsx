@@ -66,24 +66,24 @@ export default function ProfileView() {
         {/* Edit Nickname */}
         <form onSubmit={handleSaveNickname} className="space-y-2.5 pt-3 border-t border-[#F5F5F7]">
           <label className="block space-y-1">
-            <span className="block font-semibold text-[18px] text-[#000000]">
+            <span className="block font-bold text-[20px] text-[#000000]">
               Display name
             </span>
-            <input
-              type="text"
-              value={nickname}
-              onChange={(e) => setNickname(e.target.value)}
-              className="w-full min-h-[52px] rounded-2xl border border-[#D2D2D7] bg-[#F5F5F7] px-4 text-[19px] text-[#000000]"
-            />
+            <div className="flex items-center justify-between gap-3">
+              <input
+                type="text"
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
+                className="w-full min-h-[52px] rounded-2xl border border-[#D2D2D7] bg-[#F5F5F7] px-4 text-[19px] text-[#000000]"
+              />
+              <button
+                type="submit"
+                className="h-[48px] rounded-2xl bg-[#0071E3] hover:bg-[#005BB5] text-white font-semibold px-5 text-base inline-flex items-center gap-2 transition"
+              >
+                <span>{savedNotice ? 'Saved!' : 'Save'}</span>
+              </button>
+            </div>
           </label>
-
-          <button
-            type="submit"
-            className="min-h-[48px] rounded-2xl bg-[#0071E3] hover:bg-[#005BB5] text-white font-semibold px-5 text-base inline-flex items-center gap-2 transition"
-          >
-            {savedNotice ? <Check className="w-5 h-5" /> : null}
-            <span>{savedNotice ? 'Saved!' : 'Save name'}</span>
-          </button>
         </form>
 
         {/* Bigger text toggle */}
@@ -103,25 +103,12 @@ export default function ProfileView() {
             role="switch"
             aria-checked={Boolean(currentUser?.bigger_text)}
             onClick={() => updateOwnProfile({ bigger_text: !currentUser?.bigger_text })}
-            className={`min-h-[48px] rounded-2xl px-5 font-bold text-base transition ${
-              currentUser?.bigger_text
-                ? 'bg-[#0071E3] text-white'
-                : 'bg-[#F5F5F7] border border-[#D2D2D7] text-[#000000]'
-            }`}
+            className={`min-h-[48px] rounded-2xl px-5 font-bold text-base transition ${currentUser?.bigger_text
+              ? 'bg-[#0071E3] text-white'
+              : 'bg-[#F5F5F7] border border-[#D2D2D7] text-[#000000]'
+              }`}
           >
             {currentUser?.bigger_text ? 'ON' : 'OFF'}
-          </button>
-        </div>
-
-        {/* Sign Out */}
-        <div className="pt-3 border-t border-[#F5F5F7]">
-          <button
-            type="button"
-            onClick={logout}
-            className="w-full min-h-[52px] rounded-2xl border border-[#5A122C] bg-[#FFFFFF] hover:bg-[#FDF2F4] text-[#5A122C] font-bold text-[18px] inline-flex items-center justify-center gap-2 transition"
-          >
-            <LogOut className="w-5 h-5" />
-            <span>Sign out</span>
           </button>
         </div>
       </section>
@@ -151,6 +138,17 @@ export default function ProfileView() {
           ))}
         </div>
       </section>
+      {/* Sign Out */}
+      <div className="pt-3 border-t border-[#F5F5F7]">
+        <button
+          type="button"
+          onClick={logout}
+          className="w-full min-h-[52px] rounded-2xl border border-[#5A122C] bg-[#FFFFFF] hover:bg-[#FDF2F4] text-[#5A122C] font-bold text-[18px] inline-flex items-center justify-center gap-2 transition"
+        >
+          <LogOut className="w-5 h-5" />
+          <span>Sign out</span>
+        </button>
+      </div>
     </div>
   );
 }
