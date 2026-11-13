@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, Pause, Play, Video } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { Pause, Play, Video } from 'lucide-react';
 
 function VideoPlayer({ item, simple }) {
   const isRealVideoFile =
@@ -52,26 +52,26 @@ function VideoPlayer({ item, simple }) {
       </div>
 
       {/* Controls sit cleanly below the visual — never placed over photos */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#F5F5F7] rounded-xl px-4 py-2.5 border border-[#D2D2D7]">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-[#F5F5F7] rounded-xl px-4 py-2 border border-[#D2D2D7]">
         <button
           type="button"
           onClick={() => setPlaying((p) => !p)}
           className={`inline-flex items-center gap-2 rounded-xl bg-[#0071E3] hover:bg-[#005BB5] active:scale-[0.98] text-white font-semibold px-4 transition ${
-            simple ? 'min-h-[56px] text-[20px]' : 'min-h-[44px] text-base'
+            simple ? 'min-h-[48px] text-[19px]' : 'min-h-[40px] text-sm'
           }`}
         >
           {playing ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-          <span>{playing ? 'Pause video' : 'Play video'}</span>
+          <span>{playing ? 'Pause' : 'Play video'}</span>
         </button>
 
         <div className="flex items-center gap-2 text-[#000000] font-medium">
           <Video className="w-5 h-5 text-[#5A122C]" aria-hidden="true" />
-          <span className={simple ? 'text-[20px]' : 'text-sm'}>
+          <span className={simple ? 'text-[18px]' : 'text-sm'}>
             {formatSec(elapsed)} / {formatSec(total)}
           </span>
         </div>
 
-        <div className="w-full h-2 bg-[#D2D2D7] rounded-full overflow-hidden">
+        <div className="w-full h-1.5 bg-[#D2D2D7] rounded-full overflow-hidden">
           <div
             className="h-full bg-[#0071E3] transition-all duration-300"
             style={{ width: `${Math.round((elapsed / total) * 100)}%` }}
@@ -84,62 +84,86 @@ function VideoPlayer({ item, simple }) {
 
 export default function MediaCarousel({ media = [], simple = false }) {
   const [index, setIndex] = useState(0);
+  const scrollRef = useRef(null);
 
   if (!media.length) return null;
-
-  const safeIndex = Math.min(index, media.length - 1);
-  const current = media[safeIndex];
   const hasMany = media.length > 1;
 
+  function handleScroll(e) {
+    const el = e.currentTarget;
+    const width = el.offsetWidth;
+    if (width > 0) {
+      const nextIdx = Math.round(el.scrollLeft / width);
+      if (nextIdx !== index) {
+        setIndex(nextIdx);
+      }
+    }
+  }
+
+  function scrollToIndex(targetIdx) {
+    const el = scrollRef.current;
+    if (el) {
+      el.scrollTo({ left: targetIdx * el.offsetWidth, behavior: 'smooth' });
+      setIndex(targetIdx);
+    }
+  }
+
   return (
-    <div className="flex flex-col gap-3">
-      {current.kind === 'video' ? (
-        <VideoPlayer item={current} simple={simple} />
-      ) : (
-        <div className="overflow-hidden rounded-2xl bg-[#F5F5F7] border border-[#D2D2D7]">
-          <img
-            src={current.url}
-            alt={current.alt || 'Shared family photo'}
-            className={`w-full object-cover ${
-              simple ? 'h-[36vh] min-h-[240px] max-h-[400px]' : 'aspect-[4/3] max-h-[520px]'
-            }`}
-          />
-        </div>
-      )}
+    <div className="flex flex-col gap-1.5">
+      {/* Horizontal Swipe Snap Track */}
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex overflow-x-auto snap-x snap-mandatory no-scrollbar rounded-2xl border border-[#D2D2D7] bg-[#F5F5F7]"
+      >
+        {media.map((item, i) => (
+          <div
+            key={item.id || i}
+            className="w-full shrink-0 snap-center overflow-hidden flex items-center justify-center"
+          >
+            {item.kind === 'video' ? (
+              <div className="w-full">
+                <VideoPlayer item={item} simple={simple} />
+              </div>
+            ) : (
+              <img
+                src={item.url}
+                alt={item.alt || 'Shared family photo'}
+                className={`w-full object-cover select-none ${
+                  simple ? 'h-[36vh] min-h-[220px] max-h-[380px]' : 'aspect-[4/3] max-h-[500px]'
+                }`}
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            )}
+          </div>
+        ))}
+      </div>
 
+      {/* Minimal Dots Indicator (saves ~50px of vertical space on mobile) */}
       {hasMany && (
-        <div className="flex items-center justify-between gap-3 pt-1">
-          <button
-            type="button"
-            onClick={() => setIndex((i) => Math.max(0, i - 1))}
-            disabled={safeIndex === 0}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#D2D2D7] bg-[#FFFFFF] text-[#000000] font-semibold px-4 disabled:opacity-40 hover:bg-[#F5F5F7] active:scale-[0.98] transition ${
-              simple ? 'min-h-[56px] text-[19px] flex-1' : 'min-h-[44px] text-sm'
-            }`}
-          >
-            <ChevronLeft className="w-5 h-5" />
-            <span>Previous</span>
-          </button>
-
-          <span
-            className={`font-semibold text-[#000000] px-2 ${
-              simple ? 'text-[20px]' : 'text-sm'
-            }`}
-          >
-            {safeIndex + 1} of {media.length}
-          </span>
-
-          <button
-            type="button"
-            onClick={() => setIndex((i) => Math.min(media.length - 1, i + 1))}
-            disabled={safeIndex === media.length - 1}
-            className={`inline-flex items-center justify-center gap-1.5 rounded-xl border border-[#D2D2D7] bg-[#FFFFFF] text-[#000000] font-semibold px-4 disabled:opacity-40 hover:bg-[#F5F5F7] active:scale-[0.98] transition ${
-              simple ? 'min-h-[56px] text-[19px] flex-1' : 'min-h-[44px] text-sm'
-            }`}
-          >
-            <span>Next</span>
-            <ChevronRight className="w-5 h-5" />
-          </button>
+        <div
+          role="tablist"
+          aria-label="Photo carousel pagination"
+          className="flex items-center justify-center gap-1.5 py-1"
+        >
+          {media.map((_, i) => {
+            const active = i === index;
+            return (
+              <button
+                key={i}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                aria-label={`Photo ${i + 1} of ${media.length}`}
+                onClick={() => scrollToIndex(i)}
+                className={`transition-all duration-200 rounded-full ${
+                  active
+                    ? 'w-4 h-1.5 bg-[#0071E3]'
+                    : 'w-1.5 h-1.5 bg-[#D2D2D7] hover:bg-[#86868B]'
+                }`}
+              />
+            );
+          })}
         </div>
       )}
     </div>
